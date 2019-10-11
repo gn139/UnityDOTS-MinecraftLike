@@ -1,0 +1,6 @@
+This is a simple texture offset script. It is used here
+for making an illusion of a moving ground or water.
+You can change the scrolling speed in the inspector.
+
+email : 	a.kolmonen@gmail.com
+web page :	https://www.facebook.com/SunnySIdeDevelope

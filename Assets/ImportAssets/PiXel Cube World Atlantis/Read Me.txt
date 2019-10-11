@@ -1,0 +1,27 @@
+Hello.
+
+Thank you for purchasing Pixel Cube World Antlantis package.
+
+
+There are 27 different fbx files. Seven of them are simple cubes 
+wich are good for prototyping or adding detail to bigger blocks.
+All models use one atlas texture except the ground objects.
+Colliders are generated on import.
+
+Tris count range from 8 to 5662.
+
+These models can be used in mobile games in some extent.
+If you build a bigger scene with many objects..keep an eye for the poly count.
+Note that using the simple six sided blocks for building big enviroments
+will end up in bigger polycounts.
+
+There is a simple texture ofset script included. Its there to add some visual
+spice to the water. You can change the speed of scrolling on the inspector.
+
+Have some fun with the enviroment :) Import a character and run around.
+
+Please tell us on our website how you think this package could be made better.
+
+
+email : 	a.kolmonen@gmail.com
+web page :	https://www.facebook.com/SunnySIdeDevelope
