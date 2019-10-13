@@ -132,44 +132,44 @@ namespace Systems {
             }
 
             Entity RandomCreateVoxel (int jobIndex, Prefabs prefabs, int y, float height) {
-                // if (y + 1 > height) {
-                //     var randomFactroy = Random.NextInt (0, 39);
-                //     if (randomFactroy < 10)
-                //         return CommandBuffer.Instantiate (jobIndex, prefabs.GroundGreen);
-                //     if (randomFactroy < 20)
-                //         return CommandBuffer.Instantiate (jobIndex, prefabs.GroundBrown);
-                //     if (randomFactroy < 30)
-                //         return CommandBuffer.Instantiate (jobIndex, prefabs.GreyStone);
-                //     // if (randomFactroy < 40)
-                //     //     return CommandBuffer.Instantiate (jobIndex, prefabs.Ground3);
-                //     // if (randomFactroy < 50)
-                //     //     return CommandBuffer.Instantiate (jobIndex, prefabs.Ground4);
-                //     // if (randomFactroy < 60)
-                //     //     return CommandBuffer.Instantiate (jobIndex, prefabs.Ground5);
-                //     // if (randomFactroy < 70)
-                //     //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation0);
-                //     // if (randomFactroy < 80)
-                //     //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation1);
-                //     // if (randomFactroy < 90)
-                //     //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation2);
-                //     // if (randomFactroy < 100)
-                //     //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation3);
-                //     // if (randomFactroy < 110)
-                //     //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation4);
-                //     // if (randomFactroy < 120)
-                //     //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation5);
-                // }
-                // if (y >= 0) {
-                //     var randomFactroy = Random.NextInt (0, 39);
-                //     if (randomFactroy < 10)
-                //         return CommandBuffer.Instantiate (jobIndex, prefabs.GroundBrown);
-                //     if (randomFactroy < 20)
-                //         return CommandBuffer.Instantiate (jobIndex, prefabs.Sand);
-                //     if (randomFactroy < 30)
-                //         return CommandBuffer.Instantiate (jobIndex, prefabs.GreyStone);
-                // }
+                if (y + 1 > height) {
+                    var randomFactroy = Random.NextInt (0, 39);
+                    if (randomFactroy < 10)
+                        return CommandBuffer.Instantiate (jobIndex, prefabs.GroundGreen);
+                    if (randomFactroy < 20)
+                        return CommandBuffer.Instantiate (jobIndex, prefabs.GroundBrown);
+                    if (randomFactroy < 30)
+                        return CommandBuffer.Instantiate (jobIndex, prefabs.GreyStone);
+                    // if (randomFactroy < 40)
+                    //     return CommandBuffer.Instantiate (jobIndex, prefabs.Ground3);
+                    // if (randomFactroy < 50)
+                    //     return CommandBuffer.Instantiate (jobIndex, prefabs.Ground4);
+                    // if (randomFactroy < 60)
+                    //     return CommandBuffer.Instantiate (jobIndex, prefabs.Ground5);
+                    // if (randomFactroy < 70)
+                    //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation0);
+                    // if (randomFactroy < 80)
+                    //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation1);
+                    // if (randomFactroy < 90)
+                    //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation2);
+                    // if (randomFactroy < 100)
+                    //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation3);
+                    // if (randomFactroy < 110)
+                    //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation4);
+                    // if (randomFactroy < 120)
+                    //     return CommandBuffer.Instantiate (jobIndex, prefabs.GroundVegetation5);
+                }
+                if (y >= 0) {
+                    var randomFactroy = Random.NextInt (0, 39);
+                    if (randomFactroy < 10)
+                        return CommandBuffer.Instantiate (jobIndex, prefabs.GroundBrown);
+                    if (randomFactroy < 20)
+                        return CommandBuffer.Instantiate (jobIndex, prefabs.Sand);
+                    if (randomFactroy < 30)
+                        return CommandBuffer.Instantiate (jobIndex, prefabs.GreyStone);
+                }
 
-                return CommandBuffer.Instantiate (jobIndex, prefabs.GroundGreen);
+                return CommandBuffer.Instantiate (jobIndex, prefabs.GroundBrown);
 
             }
         }

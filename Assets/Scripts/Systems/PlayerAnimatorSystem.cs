@@ -11,10 +11,16 @@ using UnityEngine;
 using static CharacterControllerUtilities;
 
 namespace Systems {
-    [UpdateAfter(typeof(EndFramePhysicsSystem))]
+    [UpdateAfter (typeof (EndFramePhysicsSystem))]
     public class PlayerAnimatorSystem : ComponentSystem {
+
+        Animator animator;
+        protected override void OnStartRunning () {
+            animator = GameObject.FindGameObjectWithTag ("PlayerAnimator").GetComponent<Animator> ();
+            animator.updateMode = AnimatorUpdateMode.AnimatePhysics;//dont know if its useful 不知道是否有用 
+        }
+
         protected override void OnUpdate () {
-            var animator = GameObject.FindGameObjectWithTag ("PlayerAnimator").GetComponent<Animator> ();
             Entities.WithAllReadOnly<PlayerTag, CharacterControllerInternalData> ().ForEach ((Entity entity,
                 ref CharacterControllerInternalData data) => {
                 if (!animator)
@@ -23,13 +29,13 @@ namespace Systems {
                     animator.SetBool ("InGround", false);
                 if (data.SupportedState == CharacterSupportState.Supported)
                     animator.SetBool ("InGround", true);
-                PlayerOnGround(animator, data);
-                PlayerNotOnGround(animator, data);
+                PlayerOnGround (data);
+                PlayerNotOnGround (data);
 
             });
         }
 
-        void PlayerOnGround (Animator animator, CharacterControllerInternalData data) {
+        void PlayerOnGround (CharacterControllerInternalData data) {
             if (!animator.GetBool ("InGround"))
                 return;
             animator.SetBool ("IsLand", true);
@@ -42,15 +48,15 @@ namespace Systems {
             } else if (sqrLength > 0 && sqrLength <= 4.5f) {
                 animator.SetBool ("isWalk", true);
                 animator.SetBool ("IsRun", false);
-            } 
-            
-            if(data.LinearVelocity.x < 0.1f && data.LinearVelocity.z < 0.1f){
+            }
+
+            if (data.LinearVelocity.x < 0.01f && data.LinearVelocity.z < 0.01f) {
                 animator.SetBool ("IsRun", false);
                 animator.SetBool ("isWalk", false);
             }
         }
 
-        void PlayerNotOnGround (Animator animator, CharacterControllerInternalData data) {
+        void PlayerNotOnGround (CharacterControllerInternalData data) {
             if (animator.GetBool ("InGround"))
                 return;
             if (data.LinearVelocity.y < 0.5) {
