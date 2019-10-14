@@ -33,6 +33,8 @@ Usually, when generating the world of blocks similar to Minecraft, we use the Me
 ## To Do List
 
 - [ ] Use JobSystem to update Mesh
+- [ ] Generate more complex world
+- [ ] Create biology in the world
 - [ ] Navigation with Unity ECS
 
 ## Others

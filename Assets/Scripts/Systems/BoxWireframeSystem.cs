@@ -11,6 +11,10 @@ using UnityEngine;
 using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Systems {
+    /// <summary>
+    /// 1.Controll the BoxCubePointer
+    /// 2.Voxel's creation and destruction
+    /// </summary>
     [UpdateAfter (typeof (CharacterControllerSystem))]
     public class BoxWireframeSystem : ComponentSystem {
         EntityQuery playerQuery;
@@ -97,7 +101,9 @@ namespace Systems {
                         PostUpdateCommands.AddComponent ((Entity) lastHit, new Disabled ());
                     }
 
-                } else if (lastHit != null) {
+                }
+                
+                if (raycastHits.Length == 0 && lastHit != null) {
                     var lastPos = EntityManager.GetComponentData<Translation> ((Entity) lastHit).Value;
                     var posChange = raycastInput.End - lastPos;
                     var x = math.abs (posChange.x);
