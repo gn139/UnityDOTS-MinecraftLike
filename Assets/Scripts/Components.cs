@@ -1,5 +1,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using Voxel;
 
 namespace Components {
     public struct VoxelTag : IComponentData { }
@@ -9,12 +10,18 @@ namespace Components {
     public struct VoxelPosition : IComponentData {
         public float3 Value;
     }
+
+    public struct VoxelType : IComponentData {
+        public VoxelState Value;
+    }
+
+    public struct VoxelSuface : IComponentData {
+        public int Value;
+    }
     //========================================================================//
     public struct VoxelChunkTag : IComponentData { }
 
-    public struct VoxelChunkNeedHide : IComponentData { }
-
-    public struct VoxelChunkHidden : IComponentData { }
+    public struct VoxelChunkChanged : IComponentData { }
 
     public struct WithOutVoxel : IComponentData { }
 
@@ -26,6 +33,54 @@ namespace Components {
         public int X;
         public int Y;
         public int Z;
+    }
+
+    /// <summary>
+    ///     The buffer of mesh vertices.
+    /// </summary>
+    [InternalBufferCapacity(0)]
+    public struct Vertex : IBufferElementData
+    {
+        /// <summary>
+        ///     The Vertex.
+        /// </summary>
+        public float3 Value;
+    }
+
+    /// <summary>
+    ///     The buffer of mesh uvs.
+    /// </summary>
+    [InternalBufferCapacity(0)]
+    public struct Uv : IBufferElementData
+    {
+        /// <summary>
+        ///     The uv.
+        /// </summary>
+        public float3 Value;
+    }
+
+    /// <summary>
+    ///     The buffer of mesh normals.
+    /// </summary>
+    [InternalBufferCapacity(0)]
+    public struct Normal : IBufferElementData
+    {
+        /// <summary>
+        ///     The normal.
+        /// </summary>
+        public float3 Value;
+    }
+
+    /// <summary>
+    ///     The buffer of mesh triangles.
+    /// </summary>
+    [InternalBufferCapacity(0)]
+    public struct Triangle : IBufferElementData
+    {
+        /// <summary>
+        ///     The triangle.
+        /// </summary>
+        public int Value;
     }
 
     //========================================================================//

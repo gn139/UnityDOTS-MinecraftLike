@@ -1,0 +1,465 @@
+{
+    "extension": "linecount",
+    "version": "0.1.7",
+    "workspace": "e:\\git\\UnityDOTS-MincraftLike",
+    "linecount": [
+        {
+            "version": "0.1.7",
+            "counttime": "2019-10-15 15:54:53",
+            "filesum": 50,
+            "codesum": 10891,
+            "commentsum": 462,
+            "blanksum": 547,
+            "filelist": [
+                {
+                    "blank": 0,
+                    "code": 750,
+                    "comment": 0,
+                    "filename": "Assembly-CSharp-Editor.csproj"
+                },
+                {
+                    "blank": 0,
+                    "code": 739,
+                    "comment": 0,
+                    "filename": "Assembly-CSharp.csproj"
+                },
+                {
+                    "blank": 0,
+                    "code": 734,
+                    "comment": 0,
+                    "filename": "Assets\\Animations\\Player.controller"
+                },
+                {
+                    "blank": 4,
+                    "code": 27,
+                    "comment": 0,
+                    "filename": "Assets\\Common\\Scripts\\EntitySender.cs"
+                },
+                {
+                    "blank": 4,
+                    "code": 26,
+                    "comment": 2,
+                    "filename": "Assets\\Common\\Scripts\\EntityTracker.cs"
+                },
+                {
+                    "blank": 7,
+                    "code": 34,
+                    "comment": 8,
+                    "filename": "Assets\\Common\\Shaders\\PerTriangleColor.shader"
+                },
+                {
+                    "blank": 0,
+                    "code": 1135,
+                    "comment": 0,
+                    "filename": "Assets\\ImportAssets\\FreeVoxelGirl\\DemoScene\\AnimatorController\\DemoAnimation.controller"
+                },
+                {
+                    "blank": 13,
+                    "code": 16,
+                    "comment": 2,
+                    "filename": "Assets\\ImportAssets\\FreeVoxelGirl\\ReadMe.txt"
+                },
+                {
+                    "blank": 10,
+                    "code": 17,
+                    "comment": 1,
+                    "filename": "Assets\\ImportAssets\\PiXel Cube World Atlantis\\Read Me.txt"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 1,
+                    "filename": "Assets\\ImportAssets\\PiXel Cube World Atlantis\\Scripts\\Script read me.txt"
+                },
+                {
+                    "blank": 1,
+                    "code": 13,
+                    "comment": 0,
+                    "filename": "Assets\\ImportAssets\\PiXel Cube World Atlantis\\Scripts\\TextureOffset.cs"
+                },
+                {
+                    "blank": 0,
+                    "code": 2400,
+                    "comment": 0,
+                    "filename": "Assets\\ImportAssets\\SampleAssets\\Animation\\ActorAnimation.anim"
+                },
+                {
+                    "blank": 0,
+                    "code": 67,
+                    "comment": 0,
+                    "filename": "Assets\\ImportAssets\\SampleAssets\\Animation\\Actors.controller"
+                },
+                {
+                    "blank": 6,
+                    "code": 27,
+                    "comment": 0,
+                    "filename": "Assets\\ImportAssets\\SampleAssets\\Animation\\animatedCookie.cs"
+                },
+                {
+                    "blank": 8,
+                    "code": 56,
+                    "comment": 2,
+                    "filename": "Assets\\ImportAssets\\SampleAssets\\Shaders\\Wiggle.shader"
+                },
+                {
+                    "blank": 0,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "Assets\\ImportAssets\\SampleAssets\\UnderwaterTerrainLayer.terrainlayer"
+                },
+                {
+                    "blank": 12,
+                    "code": 134,
+                    "comment": 3,
+                    "filename": "Assets\\PlayerController.cs"
+                },
+                {
+                    "blank": 0,
+                    "code": 238,
+                    "comment": 0,
+                    "filename": "Assets\\PlayerController.inputactions"
+                },
+                {
+                    "blank": 4,
+                    "code": 43,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Boids\\Boid.cs"
+                },
+                {
+                    "blank": 2,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\Boids\\BoidObstacleProxy.cs"
+                },
+                {
+                    "blank": 52,
+                    "code": 271,
+                    "comment": 46,
+                    "filename": "Assets\\Scripts\\Boids\\BoidSystem.cs"
+                },
+                {
+                    "blank": 2,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\Boids\\BoidTargetProxy.cs"
+                },
+                {
+                    "blank": 6,
+                    "code": 38,
+                    "comment": 4,
+                    "filename": "Assets\\Scripts\\Boids\\SpawnRandomInSphere.cs"
+                },
+                {
+                    "blank": 6,
+                    "code": 41,
+                    "comment": 9,
+                    "filename": "Assets\\Scripts\\Boids\\SpawnRandomInSphereSystem.cs"
+                },
+                {
+                    "blank": 15,
+                    "code": 81,
+                    "comment": 29,
+                    "filename": "Assets\\Scripts\\CameraAuthor.cs"
+                },
+                {
+                    "blank": 76,
+                    "code": 349,
+                    "comment": 43,
+                    "filename": "Assets\\Scripts\\CharacterController\\CharacterControllerAuthoring.cs"
+                },
+                {
+                    "blank": 5,
+                    "code": 35,
+                    "comment": 3,
+                    "filename": "Assets\\Scripts\\CharacterController\\CharacterControllerOneToManyInputSystem.cs"
+                },
+                {
+                    "blank": 82,
+                    "code": 429,
+                    "comment": 47,
+                    "filename": "Assets\\Scripts\\CharacterController\\CharacterControllerUtilities.cs"
+                },
+                {
+                    "blank": 20,
+                    "code": 96,
+                    "comment": 4,
+                    "filename": "Assets\\Scripts\\CharacterController\\CharacterGunAuthoring.cs"
+                },
+                {
+                    "blank": 19,
+                    "code": 72,
+                    "comment": 14,
+                    "filename": "Assets\\Scripts\\Components.cs"
+                },
+                {
+                    "blank": 6,
+                    "code": 12,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\CubePointerAuthor.cs"
+                },
+                {
+                    "blank": 18,
+                    "code": 120,
+                    "comment": 7,
+                    "filename": "Assets\\Scripts\\Systems\\BoxWireframeSystem.cs"
+                },
+                {
+                    "blank": 19,
+                    "code": 169,
+                    "comment": 13,
+                    "filename": "Assets\\Scripts\\Systems\\CameraControlSystem.cs"
+                },
+                {
+                    "blank": 12,
+                    "code": 8,
+                    "comment": 98,
+                    "filename": "Assets\\Scripts\\Systems\\ChunkUpdateSystem.cs"
+                },
+                {
+                    "blank": 17,
+                    "code": 56,
+                    "comment": 8,
+                    "filename": "Assets\\Scripts\\Systems\\InputGatheringSystem.cs"
+                },
+                {
+                    "blank": 8,
+                    "code": 62,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\Systems\\PlayerAnimatorSystem.cs"
+                },
+                {
+                    "blank": 34,
+                    "code": 139,
+                    "comment": 81,
+                    "filename": "Assets\\Scripts\\Systems\\TerrainSpawnerSystem.cs"
+                },
+                {
+                    "blank": 7,
+                    "code": 40,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\TerrainSpawnerAuthor.cs"
+                },
+                {
+                    "blank": 6,
+                    "code": 34,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\Util\\PerlinNoiseUtil.cs"
+                },
+                {
+                    "blank": 3,
+                    "code": 11,
+                    "comment": 19,
+                    "filename": "Assets\\Scripts\\VoxelAuthor.cs"
+                },
+                {
+                    "blank": 7,
+                    "code": 20,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\WireframeAuthor.cs"
+                },
+                {
+                    "blank": 28,
+                    "code": 154,
+                    "comment": 1,
+                    "filename": "LICENSE"
+                },
+                {
+                    "blank": 6,
+                    "code": 51,
+                    "comment": 0,
+                    "filename": "Logs\\Packages-Update.log"
+                },
+                {
+                    "blank": 0,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "MincraftLikeGameAlpha.sln"
+                },
+                {
+                    "blank": 0,
+                    "code": 643,
+                    "comment": 0,
+                    "filename": "NavMeshComponents.csproj"
+                },
+                {
+                    "blank": 0,
+                    "code": 660,
+                    "comment": 0,
+                    "filename": "NavMeshComponentsEditor.csproj"
+                },
+                {
+                    "blank": 0,
+                    "code": 45,
+                    "comment": 0,
+                    "filename": "Packages\\manifest.json"
+                },
+                {
+                    "blank": 21,
+                    "code": 25,
+                    "comment": 8,
+                    "filename": "README.md"
+                },
+                {
+                    "blank": 0,
+                    "code": 685,
+                    "comment": 0,
+                    "filename": "Samples.Boids.csproj"
+                },
+                {
+                    "blank": 0,
+                    "code": 20,
+                    "comment": 0,
+                    "filename": "UnityDOTS-MincraftLike.sln"
+                }
+            ]
+        },
+        {
+            "version": "0.1.7",
+            "counttime": "2019-10-15 16:03:07",
+            "filesum": 23,
+            "codesum": 2146,
+            "commentsum": 434,
+            "blanksum": 426,
+            "filelist": [
+                {
+                    "blank": 4,
+                    "code": 43,
+                    "comment": 1,
+                    "filename": "Assets\\Scripts\\Boids\\Boid.cs"
+                },
+                {
+                    "blank": 2,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\Boids\\BoidObstacleProxy.cs"
+                },
+                {
+                    "blank": 52,
+                    "code": 271,
+                    "comment": 46,
+                    "filename": "Assets\\Scripts\\Boids\\BoidSystem.cs"
+                },
+                {
+                    "blank": 2,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\Boids\\BoidTargetProxy.cs"
+                },
+                {
+                    "blank": 6,
+                    "code": 38,
+                    "comment": 4,
+                    "filename": "Assets\\Scripts\\Boids\\SpawnRandomInSphere.cs"
+                },
+                {
+                    "blank": 6,
+                    "code": 41,
+                    "comment": 9,
+                    "filename": "Assets\\Scripts\\Boids\\SpawnRandomInSphereSystem.cs"
+                },
+                {
+                    "blank": 15,
+                    "code": 81,
+                    "comment": 29,
+                    "filename": "Assets\\Scripts\\CameraAuthor.cs"
+                },
+                {
+                    "blank": 76,
+                    "code": 349,
+                    "comment": 43,
+                    "filename": "Assets\\Scripts\\CharacterController\\CharacterControllerAuthoring.cs"
+                },
+                {
+                    "blank": 5,
+                    "code": 35,
+                    "comment": 3,
+                    "filename": "Assets\\Scripts\\CharacterController\\CharacterControllerOneToManyInputSystem.cs"
+                },
+                {
+                    "blank": 82,
+                    "code": 429,
+                    "comment": 47,
+                    "filename": "Assets\\Scripts\\CharacterController\\CharacterControllerUtilities.cs"
+                },
+                {
+                    "blank": 20,
+                    "code": 96,
+                    "comment": 4,
+                    "filename": "Assets\\Scripts\\CharacterController\\CharacterGunAuthoring.cs"
+                },
+                {
+                    "blank": 19,
+                    "code": 72,
+                    "comment": 14,
+                    "filename": "Assets\\Scripts\\Components.cs"
+                },
+                {
+                    "blank": 6,
+                    "code": 12,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\CubePointerAuthor.cs"
+                },
+                {
+                    "blank": 18,
+                    "code": 120,
+                    "comment": 7,
+                    "filename": "Assets\\Scripts\\Systems\\BoxWireframeSystem.cs"
+                },
+                {
+                    "blank": 19,
+                    "code": 169,
+                    "comment": 13,
+                    "filename": "Assets\\Scripts\\Systems\\CameraControlSystem.cs"
+                },
+                {
+                    "blank": 12,
+                    "code": 8,
+                    "comment": 98,
+                    "filename": "Assets\\Scripts\\Systems\\ChunkUpdateSystem.cs"
+                },
+                {
+                    "blank": 17,
+                    "code": 56,
+                    "comment": 8,
+                    "filename": "Assets\\Scripts\\Systems\\InputGatheringSystem.cs"
+                },
+                {
+                    "blank": 8,
+                    "code": 62,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\Systems\\PlayerAnimatorSystem.cs"
+                },
+                {
+                    "blank": 34,
+                    "code": 139,
+                    "comment": 81,
+                    "filename": "Assets\\Scripts\\Systems\\TerrainSpawnerSystem.cs"
+                },
+                {
+                    "blank": 7,
+                    "code": 40,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\TerrainSpawnerAuthor.cs"
+                },
+                {
+                    "blank": 6,
+                    "code": 34,
+                    "comment": 0,
+                    "filename": "Assets\\Scripts\\Util\\PerlinNoiseUtil.cs"
+                },
+                {
+                    "blank": 3,
+                    "code": 11,
+                    "comment": 19,
+                    "filename": "Assets\\Scripts\\VoxelAuthor.cs"
+                },
+                {
+                    "blank": 7,
+                    "code": 20,
+                    "comment": 2,
+                    "filename": "Assets\\Scripts\\WireframeAuthor.cs"
+                }
+            ]
+        }
+    ]
+}

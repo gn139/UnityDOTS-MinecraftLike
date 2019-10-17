@@ -199,6 +199,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
+    - target: {fileID: 1706919657117963122, guid: 28d7bd782f4585745b8f0b9e58258da6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1706919657189082573, guid: 28d7bd782f4585745b8f0b9e58258da6,
         type: 3}
       propertyPath: m_IsActive
@@ -456,6 +461,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BoidPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 637978637325171499, guid: f6a5aafa373ebf746aca81ec8f6d5b47,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 637978637325171498, guid: f6a5aafa373ebf746aca81ec8f6d5b47,
         type: 3}
