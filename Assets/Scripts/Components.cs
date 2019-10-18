@@ -23,7 +23,7 @@ namespace Components {
 
     public struct VoxelChunkChanged : IComponentData { }
 
-    public struct WithOutVoxel : IComponentData { }
+    // public struct WithOutVoxel : IComponentData { }
 
     public struct VoxelCount : IComponentData {
         public int Value;

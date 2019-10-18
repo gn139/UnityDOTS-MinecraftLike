@@ -9,6 +9,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
+using Util;
 
 namespace Systems {
     [UpdateAfter (typeof (CharacterControllerSystem))]
@@ -21,31 +22,32 @@ namespace Systems {
 
         float aimFOV = 80f;
 
-        [BurstCompile]
-        public struct ColliderCastJob : IJob {
-            [NativeDisableUnsafePtrRestriction] public Unity.Physics.Collider * Collider;
-            public quaternion Orientation;
-            public float3 Start;
-            public float3 End;
-            public NativeList<ColliderCastHit> ColliderCastHits;
-            public bool CollectAllHits;
-            [ReadOnly] public PhysicsWorld World;
+        // [BurstCompile]
+        // public struct ColliderCastJob : IJob {
+        //     [NativeDisableUnsafePtrRestriction] public Unity.Physics.Collider * Collider;
+        //     public quaternion Orientation;
+        //     public float3 Start;
+        //     public float3 End;
+        //     public NativeArray<ColliderCastHit> ColliderCastHits;
+        //     // public bool CollectAllHits;
+        //     [ReadOnly] public PhysicsWorld World;
 
-            public void Execute () {
-                ColliderCastInput colliderCastInput = new ColliderCastInput {
-                    Collider = Collider,
-                    Orientation = Orientation,
-                    Start = Start,
-                    End = End
-                };
+        //     public void Execute () {
+        //         ColliderCastInput colliderCastInput = new ColliderCastInput {
+        //             Collider = Collider,
+        //             Orientation = Orientation,
+        //             Start = Start,
+        //             End = End
+        //         };
 
-                if (CollectAllHits) {
-                    World.CastCollider (colliderCastInput, ref ColliderCastHits);
-                } else if (World.CastCollider (colliderCastInput, out ColliderCastHit hit)) {
-                    ColliderCastHits.Add (hit);
-                }
-            }
-        }
+        //         // if (CollectAllHits) {
+        //         //     World.CastCollider (colliderCastInput, ref ColliderCastHits);
+        //         // } else 
+        //         if (World.CastCollider (colliderCastInput, out ColliderCastHit hit)) {
+        //             ColliderCastHits[0];
+        //         }
+        //     }
+        // }
 
         protected override void OnCreate () {
             playerQuery = GetEntityQuery (typeof (PlayerTag));
@@ -138,30 +140,26 @@ namespace Systems {
             Rotation cameraRotation, float relCameraPosMag, PhysicsWorld physicsWorld) {
 
             float3 target = playerPos.Value + (math.up () * deltaPlayerHeight);
-            var colliderCastHits = new NativeList<ColliderCastHit> (Allocator.TempJob);
-            new ColliderCastJob {
+            ColliderCastHit result = new ColliderCastHit ();
+            ColliderQueryUtil.SingleColliderCast (physicsWorld.CollisionWorld, new ColliderCastInput {
                 Collider = (Unity.Physics.Collider * ) (Unity.Physics.SphereCollider.Create (new SphereGeometry {
                         Center = checkPos,
                             Radius = 0.2f
                     }).GetUnsafePtr ()),
                     Orientation = cameraRotation.Value,
                     Start = checkPos,
-                    End = math.normalize (target - checkPos) * relCameraPosMag + checkPos,
-                    ColliderCastHits = colliderCastHits,
-                    CollectAllHits = false,
-                    World = physicsWorld
-            }.Schedule ().Complete ();
+                    End = math.normalize (target - checkPos) * relCameraPosMag + checkPos
+            }, ref result);
 
             // If a raycast from the check position to the player hits something...
-            if (colliderCastHits.Length > 0) {
-                var hitBody = physicsWorld.Bodies[colliderCastHits[0].RigidBodyIndex];
+            if (result.RigidBodyIndex != -1) {
+                var hitBody = physicsWorld.Bodies[result.RigidBodyIndex];
                 // ... if it is not the player...
                 if (hitBody.Entity != player && hitBody.HasCollider) {
                     // This position isn't appropriate.
                     return false;
                 }
             }
-            colliderCastHits.Dispose ();
             // If we haven't hit anything or we've hit the player, this is an appropriate position.
             return true;
         }
@@ -172,8 +170,8 @@ namespace Systems {
             float maxDistance, Translation playerPos, Rotation cameraRotation, PhysicsWorld physicsWorld) {
             // Cast origin.
             float3 origin = playerPos.Value + (math.up () * deltaPlayerHeight);
-            var colliderCastHits = new NativeList<ColliderCastHit> (Allocator.TempJob);
-            new ColliderCastJob {
+            ColliderCastHit result = new ColliderCastHit ();
+            ColliderQueryUtil.SingleColliderCast (physicsWorld.CollisionWorld, new ColliderCastInput {
                 Collider = (Unity.Physics.Collider * ) (Unity.Physics.SphereCollider.Create (new SphereGeometry {
                         Center = origin,
                             Radius = 0.2f
@@ -181,20 +179,15 @@ namespace Systems {
                     Orientation = cameraRotation.Value,
                     Start = origin,
                     End = math.normalize (checkPos - origin) * maxDistance + origin,
-                    ColliderCastHits = colliderCastHits,
-                    CollectAllHits = false,
-                    World = physicsWorld
-            }.Schedule ().Complete ();
+            }, ref result);
 
-            if (colliderCastHits.Length > 0) {
-                var hitBody = physicsWorld.Bodies[colliderCastHits[0].RigidBodyIndex];
-                var floatBool = colliderCastHits[0].Position != cameraPos.Value;
+            if (result.RigidBodyIndex != -1) {
+                var hitBody = physicsWorld.Bodies[result.RigidBodyIndex];
+                var floatBool = result.Position != cameraPos.Value;
                 if (hitBody.Entity != player && floatBool.x && floatBool.y && floatBool.z && hitBody.HasCollider) {
                     return false;
                 }
             }
-
-            colliderCastHits.Dispose ();
             return true;
         }
     }

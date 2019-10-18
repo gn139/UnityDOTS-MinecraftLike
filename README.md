@@ -32,7 +32,7 @@ Usually, when generating the world of blocks similar to Minecraft, we use the Me
 
 ## To Do List
 
-- [ ] Use JobSystem to update Mesh
+- [x] Use JobSystem to update Mesh
 - [ ] Navigation with Unity ECS
 
 ## Others

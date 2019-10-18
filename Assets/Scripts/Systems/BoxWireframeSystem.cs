@@ -8,6 +8,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
+using Util;
 using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Systems {
@@ -61,6 +62,7 @@ namespace Systems {
                 return;
             }
             var playerPos = EntityManager.GetComponentData<Translation> (players[0]);
+            players.Dispose ();
             var cameraRotation = GameObject.FindGameObjectWithTag ("MainCamera").transform.rotation;
             var cameraPosition = GameObject.FindGameObjectWithTag ("MainCamera").transform.position;
             Entities.WithAllReadOnly<CubePointerTag> ().ForEach ((Entity entity, ref Translation position, ref Rotation rotation) => {
@@ -70,22 +72,17 @@ namespace Systems {
                     return;
                 }
                 ref PhysicsWorld world = ref World.Active.GetExistingSystem<BuildPhysicsWorld> ().PhysicsWorld;
-                var raycastHits = new NativeList<RaycastHit> (Allocator.TempJob);
-                var startPos = input.Aimed ? (float3)cameraPosition : playerPos.Value;
+                var startPos = input.Aimed ? (float3) cameraPosition : playerPos.Value;
+                var result = new RaycastHit ();
                 var raycastInput = new RaycastInput {
                     Start = startPos,
                     End = playerPos.Value + math.forward (cameraRotation) * 2,
                     Filter = CollisionFilter.Default
                 };
-                new RaycastJob {
-                    RaycastInput = raycastInput,
-                        RaycastHits = raycastHits,
-                        CollectAllHits = false,
-                        World = world
-                }.Schedule ().Complete ();
-                if (raycastHits.Length > 0) {
-                    var index = raycastHits[0].RigidBodyIndex;
-                    var hit = world.Bodies[ index != -1 ? index : 0].Entity;
+                ColliderQueryUtil.SingleRayCast (world.CollisionWorld, raycastInput, ref result);
+                if (result.RigidBodyIndex != -1) {
+                    var index = result.RigidBodyIndex;
+                    var hit = world.Bodies[index != -1 ? index : 0].Entity;
                     var currentPos = EntityManager.GetComponentData<Translation> ((Entity) hit).Value;
                     var targetPos = new float3 (currentPos.x, currentPos.y + 0.5f, currentPos.z);
                     var isEquel = targetPos != playerPos.Value;
@@ -138,7 +135,6 @@ namespace Systems {
                 }
 
                 rotation.Value = quaternion.identity;
-                raycastHits.Dispose ();
             });
         }
     }
