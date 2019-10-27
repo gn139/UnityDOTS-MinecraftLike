@@ -1,6 +1,7 @@
 using Unity.Entities;
 
 namespace Voxel {
+    [InternalBufferCapacity (0)]
     public struct BlockVoxel : IBufferElementData {
         public VoxelState Type;
 

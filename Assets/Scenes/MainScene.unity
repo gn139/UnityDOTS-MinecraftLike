@@ -94,8 +94,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -164,16 +164,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5550bd233584c446b6acbee65037d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NonePrefab: {fileID: 4514645225629881817, guid: ccac4bb4c2a282d45b6a9a4e0d211042,
+  ChunkPrefab: {fileID: 8793794254503937399, guid: 69bd39aed28b9574999d40e2aaff89db,
     type: 3}
-  GroundGreen: {fileID: 3039752551369249084, guid: 7f33e891ef331bc4085000415b990f88,
-    type: 3}
-  GroundBrown: {fileID: 6629251203021309, guid: d104cf9d41393ee4d807ddc6f0b28f2a,
-    type: 3}
-  Sand: {fileID: 6910222526361540383, guid: ee3d72aea63a6364099db93cc43fdaed, type: 3}
-  Bush: {fileID: 4364368802073574680, guid: b30637f477e9029429b97741e9440eaf, type: 3}
-  GreyStone: {fileID: 6359981991424560871, guid: 7d0b233e9bbeeca40a968fa5cde31347,
-    type: 3}
+  ChunkCount: 4
+  VoxelCount: 16
 --- !u!114 &432490383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,7 +459,7 @@ PrefabInstance:
     - target: {fileID: 637978637325171499, guid: f6a5aafa373ebf746aca81ec8f6d5b47,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 637978637325171498, guid: f6a5aafa373ebf746aca81ec8f6d5b47,
         type: 3}

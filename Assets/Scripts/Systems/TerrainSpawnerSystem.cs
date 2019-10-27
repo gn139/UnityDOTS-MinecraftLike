@@ -10,6 +10,7 @@ using Voxel;
 using Random = Unity.Mathematics.Random;
 
 namespace Systems {
+    [UpdateBefore (typeof (ChunkUpdateSystem))]
     public class TerrainSpawnerSystem : JobComponentSystem {
         BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
 
@@ -18,6 +19,7 @@ namespace Systems {
 
         EntityQuery playerQuery;
         EntityQuery prefabQuery;
+        EntityQuery countQuery;
 
         NativeArray<float3> playerPos;
 
@@ -30,6 +32,9 @@ namespace Systems {
             spawnerQuery = GetEntityQuery (new EntityQueryDesc {
                 All = new [] { ComponentType.ReadOnly<TerrainSpawner> (), ComponentType.ReadOnly<TerrainSpawnerTag> () }
             });
+
+            countQuery = GetEntityQuery (typeof (CountComponent));
+
             chunkQuery = GetEntityQuery (new EntityQueryDesc {
                 All = new [] {
                     ComponentType.ReadOnly<VoxelChunkTag> (),
@@ -38,9 +43,9 @@ namespace Systems {
                         ComponentType.ReadOnly<VoxelChunkRelativePosition> ()
                 }
             });
-            playerQuery = GetEntityQuery (ComponentType.ReadOnly<PlayerTag> (),
-                ComponentType.ReadWrite<Translation> (), ComponentType.ReadOnly<PlayerNotInGround> ());
-            prefabQuery = GetEntityQuery (typeof (Prefabs));
+            // playerQuery = GetEntityQuery (ComponentType.ReadOnly<PlayerTag> (),
+            //     ComponentType.ReadWrite<Translation> (), ComponentType.ReadOnly<PlayerNotInGround> ());
+            // prefabQuery = GetEntityQuery (typeof (Prefabs));
             random = new Unity.Mathematics.Random ();
             random.InitState ();
 
@@ -48,51 +53,70 @@ namespace Systems {
 
         }
 
+        int chunkCount;
+        int voxelCount;
+
         protected override void OnStartRunning () {
-            if (spawnerQuery.CalculateEntityCount () < 0)
-                return;
-            var spawners = spawnerQuery.ToComponentDataArray<TerrainSpawner> (Allocator.TempJob);
-            if (prefabQuery.CalculateEntityCount () == 0)
-                EntityManager.CreateEntity (typeof (Prefabs));
-            prefabQuery.SetSingleton (spawners[0].Prefabs);
-            spawners.Dispose();
+            // if (spawnerQuery.CalculateEntityCount () < 0)
+            //     return;
+            // var spawners = spawnerQuery.ToComponentDataArray<TerrainSpawner> (Allocator.TempJob);
+            // if (prefabQuery.CalculateEntityCount () == 0)
+            //     EntityManager.CreateEntity (typeof (Prefabs));
+            // prefabQuery.SetSingleton (spawners[0].Prefabs);
+
+            var count = countQuery.GetSingleton<CountComponent> ();
+            chunkCount = count.ChunkCount;
+            voxelCount = count.VoxelCount;
+
+            // spawners.Dispose ();
         }
 
         [RequireComponentTag (typeof (TerrainSpawnerTag))]
         struct SpawnChunkJob : IJobForEachWithEntity<TerrainSpawner> {
             public EntityCommandBuffer.Concurrent CommandBuffer;
+
+            public int ChunkCount;
+            public int VoxelCount;
             // public NativeArray<float3> PlayerPostions;
             public void Execute (Entity entity,
                 int index, [ReadOnly] ref TerrainSpawner spawner) {
                 // PlayerPostions[0] = new float3 (spawner.Count >> 1, 0, spawner.Count >> 1);
-                for (int x = 0; x < spawner.Count; x++) {
-                    for (int z = 0; z < spawner.Count; z++) {
-                        // var voxelChunk = CommandBuffer.CreateEntity (index);
-                        var voxelChunk = CommandBuffer.Instantiate (index, spawner.Prefabs.NonePrefab);
-                        CommandBuffer.AddBuffer<Vertex> (index, voxelChunk);
-                        CommandBuffer.AddBuffer<Uv> (index, voxelChunk);
-                        CommandBuffer.AddBuffer<Normal> (index, voxelChunk);
-                        CommandBuffer.AddBuffer<Triangle> (index, voxelChunk);
-                        CommandBuffer.AddBuffer<BlockVoxel> (index, voxelChunk);
-                        CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkTag ());
-                        CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkChanged ());
-                        CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkRelativePosition {
-                            X = x,
-                                Y = 0,
-                                Z = z
-                        });
-                        CommandBuffer.AddComponent (index, voxelChunk, new VoxelCount {
-                            Value = 20
-                        });
-                        CommandBuffer.SetComponent (index, voxelChunk, new Translation {
-                            Value = new float3 (x * 20, 0, z * 20)
-                        });
+
+                for (int x = 0; x < ChunkCount; x++) {
+                    for (int y = 0; y < ChunkCount; y++) {
+                        for (int z = 0; z < ChunkCount; z++) {
+                            // var voxelChunk = CommandBuffer.CreateEntity (index);
+                            var voxelChunk = CommandBuffer.Instantiate (index, spawner.ChunkPrefab);
+                            CommandBuffer.AddBuffer<Vertex> (index, voxelChunk);
+                            CommandBuffer.AddBuffer<Uv> (index, voxelChunk);
+                            CommandBuffer.AddBuffer<Normal> (index, voxelChunk);
+                            CommandBuffer.AddBuffer<Triangle> (index, voxelChunk);
+                            CommandBuffer.AddBuffer<BlockVoxel> (index, voxelChunk);
+                            CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkTag ());
+                            CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkChanged ());
+                            CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkRelativePosition {
+                                X = x,
+                                    Y = y,
+                                    Z = z
+                            });
+                            CommandBuffer.AddComponent (index, voxelChunk, new VoxelCount {
+                                Value = VoxelCount
+                            });
+                            CommandBuffer.SetComponent (index, voxelChunk, new Translation {
+                                Value = new float3 (x * VoxelCount, y * VoxelCount, z * VoxelCount)
+                            });
+                            CommandBuffer.SetComponent (index, voxelChunk, new Rotation {
+                                Value = quaternion.identity
+                            });
+                            CommandBuffer.AddComponent (index, voxelChunk, new Scale {
+                                Value = 1
+                            });
+                        }
                     }
                 }
                 CommandBuffer.RemoveComponent<TerrainSpawnerTag> (index, entity);
             }
         }
-
 
         // [RequireComponentTag (typeof (PlayerNotInGround))]
         // struct PutPlayerInGroundJob : IJobForEachWithEntity<Translation> {
@@ -110,7 +134,9 @@ namespace Systems {
             // playerPos = new NativeArray<float3> (1, Allocator.TempJob);
             var chunkSpwanerHandle = new SpawnChunkJob {
                 CommandBuffer = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
-                    // PlayerPostions = playerPos,
+                    ChunkCount = chunkCount,
+                    VoxelCount = voxelCount
+                // PlayerPostions = playerPos,
             }.Schedule (spawnerQuery, inputDeps);
 
             entityCommandBufferSystem.AddJobHandleForProducer (chunkSpwanerHandle);

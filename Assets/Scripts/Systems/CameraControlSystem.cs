@@ -56,7 +56,7 @@ namespace Systems {
 
         protected override void OnUpdate () {
             var players = playerQuery.ToEntityArray (Allocator.TempJob);
-            if (players.Length < 0) {
+            if (players.Length <= 0) {
                 players.Dispose ();
                 return;
             }

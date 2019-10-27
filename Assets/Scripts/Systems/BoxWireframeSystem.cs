@@ -25,7 +25,7 @@ namespace Systems {
         protected override void OnCreate () {
             characterQuery = GetEntityQuery (typeof (CharacterControllerInput));
             playerQuery = GetEntityQuery (typeof (PlayerTag));
-            prefabsQuery = GetEntityQuery (typeof (Prefabs));
+            // prefabsQuery = GetEntityQuery (typeof (Prefabs));
         }
 
         [BurstCompile]
@@ -45,7 +45,7 @@ namespace Systems {
         }
 
         protected override void OnStartRunning () {
-            voxel = prefabsQuery.GetSingleton<Prefabs> ().GreyStone;
+            // voxel = prefabsQuery.GetSingleton<Prefabs> ().GreyStone;
         }
 
         protected override void OnUpdate () {

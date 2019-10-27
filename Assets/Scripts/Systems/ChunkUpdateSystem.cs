@@ -9,13 +9,13 @@ using Unity.Transforms;
 using Voxel;
 
 [UpdateAfter (typeof (TerrainSpawnerSystem))]
+[UpdateBefore (typeof (ChunkMeshSystem))]
 public class ChunkUpdateSystem : JobComponentSystem {
 
     EntityQuery voxelChunkQuery;
     private EntityQuery hideVoxelChunkQuery;
     EntityQuery playerQuery;
-    EntityQuery voxelQuery;
-    EntityQuery terrainSpawnerQuery;
+    EntityQuery countQuery;
     BeginInitializationEntityCommandBufferSystem entityCommandBufferSystem;
     protected override void OnCreate () {
         entityCommandBufferSystem = World.GetOrCreateSystem<BeginInitializationEntityCommandBufferSystem> ();
@@ -36,6 +36,7 @@ public class ChunkUpdateSystem : JobComponentSystem {
                 typeof (VoxelChunkChanged)
             }
         });
+        countQuery = GetEntityQuery (typeof (CountComponent));
         // hideVoxelChunkQuery = GetEntityQuery (new EntityQueryDesc {
         //     All = new ComponentType[] {
         //         typeof (VoxelChunkRelativePosition),
@@ -44,18 +45,18 @@ public class ChunkUpdateSystem : JobComponentSystem {
         //         typeof (VoxelChunkHidden)
         //     },
         // });
-        voxelQuery = GetEntityQuery (new EntityQueryDesc {
-            All = new ComponentType[] {
-                typeof (VoxelPosition),
-                typeof (VoxelTag),
-                typeof (VoxelParentIndex)
-            }
-        });
+        // voxelQuery = GetEntityQuery (new EntityQueryDesc {
+        //     All = new ComponentType[] {
+        //         typeof (VoxelPosition),
+        //         typeof (VoxelTag),
+        //         typeof (VoxelParentIndex)
+        //     }
+        // });
     }
 
     [BurstCompile]
     [RequireComponentTag (typeof (VoxelChunkTag), typeof (VoxelChunkChanged))]
-    struct ChunkMeshDataJob : IJobForEachWithEntity<VoxelCount> {
+    struct ChunkMeshDataJob : IJobForEachWithEntity<VoxelCount, VoxelChunkRelativePosition> {
 
         // public NativeArray<float3> PlayerPostions;
 
@@ -66,8 +67,9 @@ public class ChunkUpdateSystem : JobComponentSystem {
         [NativeDisableParallelForRestriction] public BufferFromEntity<BlockVoxel> BlockVoxels;
 
         public Random Random;
+        public int ChunkCount;
         // [ReadOnly] public Texture2D heightMap;
-        [ReadOnly] public Prefabs Prefabs;
+        // [ReadOnly] public Prefabs Prefabs;
 
         [NativeDisableParallelForRestriction] DynamicBuffer<float3> vertices;
         // [NativeDisableParallelForRestriction] DynamicBuffer<float2> uvs;
@@ -75,7 +77,7 @@ public class ChunkUpdateSystem : JobComponentSystem {
         [NativeDisableParallelForRestriction] DynamicBuffer<int> triangles;
         [NativeDisableParallelForRestriction] DynamicBuffer<BlockVoxel> blocks;
         public void Execute (Entity entity,
-            int index, [ReadOnly] ref VoxelCount count) {
+            int index, [ReadOnly] ref VoxelCount count, [ReadOnly] ref VoxelChunkRelativePosition position) {
 
             vertices = Vertices[entity].Reinterpret<float3> ();
             // uvs = Uvs[entity].Reinterpret<float2> ();
@@ -87,11 +89,11 @@ public class ChunkUpdateSystem : JobComponentSystem {
                 for (int z = 0; z < count.Value; z++) {
                     // int hightlevel = (int) (heightMap.GetPixel (x + position.X * count.Value,
                     //     z + position.Z * count.Value).r * 100) - y;
-                    // int worldX = x + position.X * count.Value;
-                    // int worldZ = z + position.Z * count.Value;
-                    // float height = noise.snoise (new float2 (worldX, worldZ) * 0.08F) * 2 + 5;
-                    // height = height >= count.Value ? count.Value : height;
-                    for (int y = 0; y < count.Value; y++) {
+                    int worldX = x + position.X * count.Value;
+                    int worldZ = z + position.Z * count.Value;
+                    float height = noise.snoise (new float2 (worldX, worldZ) * 0.08F) * 2 + 5;
+                    height = height >= count.Value ? count.Value : height;
+                    for (int y = 0; y < height; y++) {
                         blocks.Add (new BlockVoxel (VoxelState.Already));
 
                         // var voxel = RandomCreateVoxel (index, Prefabs, y, height);
@@ -109,26 +111,26 @@ public class ChunkUpdateSystem : JobComponentSystem {
                         // CommandBuffer.AddComponent (index, voxel, new VoxelPosition {
                         //     Value = new float3 (x, y, z)
                         // });
-                        if (y == count.Value - 1) {
+                        if (y == count.Value - 1 && position.Y == ChunkCount - 1) {
                             AddFace (x, y, z, Face.Up);
                         }
-                        if (y == 0) {
+                        if (y == 0 && position.Y == 0) {
 
                             AddFace (x, y, z, Face.Down);
                         }
-                        if (x == 0) {
+                        if (x == 0 && position.X == 0) {
 
                             AddFace (x, y, z, Face.Left);
                         }
-                        if (x == count.Value - 1) {
+                        if (x == count.Value - 1 && position.X == ChunkCount - 1) {
 
                             AddFace (x, y, z, Face.Right);
                         }
-                        if (z == count.Value - 1) {
+                        if (z == 0 && position.Z == 0) {
 
                             AddFace (x, y, z, Face.Front);
                         }
-                        if (z == 0) {
+                        if (z == count.Value - 1 && position.Z == ChunkCount - 1) {
 
                             AddFace (x, y, z, Face.Back);
                         }
@@ -152,64 +154,63 @@ public class ChunkUpdateSystem : JobComponentSystem {
         void AddFace (int x, int y, int z, Face face) {
             int n = vertices.Length;
             triangles.Add (n);
-            triangles.Add (n + 2);
             triangles.Add (n + 1);
-            triangles.Add (n);
-            triangles.Add (n + 3);
             triangles.Add (n + 2);
+            triangles.Add (n);
+            triangles.Add (n + 2);
+            triangles.Add (n + 3);
 
             switch (face) {
                 case Face.Up:
                     {
                         vertices.Add (new float3 (x, y + 1, z));
-                        vertices.Add (new float3 (x + 1, y + 1, z));
-                        vertices.Add (new float3 (x + 1, y + 1, z + 1));
                         vertices.Add (new float3 (x, y + 1, z + 1));
-
+                        vertices.Add (new float3 (x + 1, y + 1, z + 1));
+                        vertices.Add (new float3 (x + 1, y + 1, z));
                         break;
                     }
                 case Face.Down:
                     {
                         vertices.Add (new float3 (x, y, z));
-                        vertices.Add (new float3 (x, y, z + 1));
-                        vertices.Add (new float3 (x + 1, y, z + 1));
                         vertices.Add (new float3 (x + 1, y, z));
+                        vertices.Add (new float3 (x + 1, y, z + 1));
+                        vertices.Add (new float3 (x, y, z + 1));
                         break;
                     }
                 case Face.Left:
                     {
-                        vertices.Add (new float3 (x, y + 1, z));
-                        vertices.Add (new float3 (x, y + 1, z + 1));
-                        vertices.Add (new float3 (x, y, z + 1));
                         vertices.Add (new float3 (x, y, z));
+                        vertices.Add (new float3 (x, y, z + 1));
+                        vertices.Add (new float3 (x, y + 1, z + 1));
+                        vertices.Add (new float3 (x, y + 1, z));
                         break;
                     }
                 case Face.Right:
                     {
-                        vertices.Add (new float3 (x + 1, y + 1, z + 1));
-                        vertices.Add (new float3 (x + 1, y + 1, z));
                         vertices.Add (new float3 (x + 1, y, z));
+                        vertices.Add (new float3 (x + 1, y + 1, z));
+                        vertices.Add (new float3 (x + 1, y + 1, z + 1));
                         vertices.Add (new float3 (x + 1, y, z + 1));
                         break;
                     }
                 case Face.Front:
                     {
-                        vertices.Add (new float3 (x, y + 1, z + 1));
-                        vertices.Add (new float3 (x + 1, y + 1, z + 1));
-                        vertices.Add (new float3 (x + 1, y, z + 1));
-                        vertices.Add (new float3 (x, y, z + 1));
+                        vertices.Add (new float3 (x, y, z));
+                        vertices.Add (new float3 (x, y + 1, z));
+                        vertices.Add (new float3 (x + 1, y + 1, z));
+                        vertices.Add (new float3 (x + 1, y, z));
                         break;
                     }
                 case Face.Back:
                     {
-                        vertices.Add (new float3 (x + 1, y + 1, z));
-                        vertices.Add (new float3 (x, y + 1, z));
-                        vertices.Add (new float3 (x, y, z));
-                        vertices.Add (new float3 (x + 1, y, z));
+                        vertices.Add (new float3 (x, y, z + 1));
+                        vertices.Add (new float3 (x + 1, y, z + 1));
+                        vertices.Add (new float3 (x + 1, y + 1, z + 1));
+                        vertices.Add (new float3 (x, y + 1, z + 1));
                         break;
                     }
             }
-            var normal = math.cross (vertices[n + 2] - vertices[n], vertices[n + 1] - vertices[n]);
+            var normal = math.normalize (math.cross (vertices[n + 2] - vertices[n], vertices[n + 1] - vertices[n]));
             normals.Add (normal);
             normals.Add (normal);
             normals.Add (normal);
@@ -311,6 +312,12 @@ public class ChunkUpdateSystem : JobComponentSystem {
 
     }
 
+    int chunkCount;
+
+    protected override void OnStartRunning () {
+        chunkCount = countQuery.GetSingleton<CountComponent> ().ChunkCount;
+    }
+
     protected override JobHandle OnUpdate (JobHandle inputDependencies) {
         inputDependencies = new ChunkMeshDataJob {
             // Random = random,
@@ -318,7 +325,8 @@ public class ChunkUpdateSystem : JobComponentSystem {
                 // Uvs = GetBufferFromEntity<Uv> (),
                 Triangles = GetBufferFromEntity<Triangle> (),
                 Normals = GetBufferFromEntity<Normal> (),
-                BlockVoxels = GetBufferFromEntity<BlockVoxel> ()
+                BlockVoxels = GetBufferFromEntity<BlockVoxel> (),
+                ChunkCount = chunkCount
         }.Schedule (voxelChunkQuery, inputDependencies);
         return inputDependencies;
     }

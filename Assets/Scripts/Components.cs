@@ -1,29 +1,14 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
 using Voxel;
 
 namespace Components {
-    public struct VoxelTag : IComponentData { }
-    public struct VoxelParentIndex : IComponentData {
-        public int Value;
-    }
-    public struct VoxelPosition : IComponentData {
-        public float3 Value;
-    }
 
-    public struct VoxelType : IComponentData {
-        public VoxelState Value;
-    }
-
-    public struct VoxelSuface : IComponentData {
-        public int Value;
-    }
     //========================================================================//
     public struct VoxelChunkTag : IComponentData { }
 
     public struct VoxelChunkChanged : IComponentData { }
-
-    // public struct WithOutVoxel : IComponentData { }
 
     public struct VoxelCount : IComponentData {
         public int Value;
@@ -38,9 +23,8 @@ namespace Components {
     /// <summary>
     ///     The buffer of mesh vertices.
     /// </summary>
-    [InternalBufferCapacity(0)]
-    public struct Vertex : IBufferElementData
-    {
+    [InternalBufferCapacity (4)]
+    public struct Vertex : IBufferElementData {
         /// <summary>
         ///     The Vertex.
         /// </summary>
@@ -50,9 +34,8 @@ namespace Components {
     /// <summary>
     ///     The buffer of mesh uvs.
     /// </summary>
-    [InternalBufferCapacity(0)]
-    public struct Uv : IBufferElementData
-    {
+    [InternalBufferCapacity (0)]
+    public struct Uv : IBufferElementData {
         /// <summary>
         ///     The uv.
         /// </summary>
@@ -62,9 +45,8 @@ namespace Components {
     /// <summary>
     ///     The buffer of mesh normals.
     /// </summary>
-    [InternalBufferCapacity(0)]
-    public struct Normal : IBufferElementData
-    {
+    [InternalBufferCapacity (4)]
+    public struct Normal : IBufferElementData {
         /// <summary>
         ///     The normal.
         /// </summary>
@@ -74,9 +56,8 @@ namespace Components {
     /// <summary>
     ///     The buffer of mesh triangles.
     /// </summary>
-    [InternalBufferCapacity(0)]
-    public struct Triangle : IBufferElementData
-    {
+    [InternalBufferCapacity (6)]
+    public struct Triangle : IBufferElementData {
         /// <summary>
         ///     The triangle.
         /// </summary>
@@ -84,21 +65,31 @@ namespace Components {
     }
 
     //========================================================================//
+    public struct CountComponent : IComponentData {
+        public int ChunkCount;
+        public int VoxelCount;
+    }
+
+    //========================================================================//
     public struct TerrainSpawnerTag : IComponentData { }
+
+    public struct TerrainTag : IComponentData { }
+
+    [WriteGroup (typeof (LocalToWorld))]
     public struct TerrainSpawner : IComponentData {
-        public Prefabs Prefabs;
-        public int Count;
+        public Entity ChunkPrefab;
+        // public int Count;
     }
 
-    public struct Prefabs : IComponentData {
-        public Entity NonePrefab;
-        public Entity GroundGreen;
-        public Entity GroundBrown;
-        public Entity Sand;
-        public Entity Bush;
-        public Entity GreyStone;
+    // public struct Prefabs : IComponentData {
+    //     public Entity TerrainPrefab;
+    //     public Entity GroundGreen;
+    //     public Entity GroundBrown;
+    //     public Entity Sand;
+    //     public Entity Bush;
+    //     public Entity GreyStone;
 
-    }
+    // }
 
     //========================================================================//
     public struct PlayerTag : IComponentData { }
