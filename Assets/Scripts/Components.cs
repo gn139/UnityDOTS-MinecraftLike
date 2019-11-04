@@ -8,6 +8,8 @@ namespace Components {
     //========================================================================//
     public struct VoxelChunkTag : IComponentData { }
 
+    public struct VoxelChunkNewborn : IComponentData {}
+
     public struct VoxelChunkChanged : IComponentData { }
 
     public struct VoxelCount : IComponentData {

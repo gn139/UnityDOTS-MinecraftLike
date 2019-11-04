@@ -25,6 +25,8 @@ namespace Systems {
 
         Random random;
 
+        PerlinNoise perlinNoise;
+
         // Texture2D heightMap;
 
         protected override void OnCreate () {
@@ -48,6 +50,7 @@ namespace Systems {
             // prefabQuery = GetEntityQuery (typeof (Prefabs));
             random = new Unity.Mathematics.Random ();
             random.InitState ();
+            perlinNoise = new PerlinNoise(random.NextInt(100, 1000), 250);
 
             // heightMap = PerlinNoiseUtil.GenerateHeightMap (random.NextFloat (0, 99999), random.NextFloat (0, 99999));
 
@@ -93,7 +96,7 @@ namespace Systems {
                             CommandBuffer.AddBuffer<Triangle> (index, voxelChunk);
                             CommandBuffer.AddBuffer<BlockVoxel> (index, voxelChunk);
                             CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkTag ());
-                            CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkChanged ());
+                            CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkNewborn ());
                             CommandBuffer.AddComponent (index, voxelChunk, new VoxelChunkRelativePosition {
                                 X = x,
                                     Y = y,
@@ -115,6 +118,18 @@ namespace Systems {
                     }
                 }
                 CommandBuffer.RemoveComponent<TerrainSpawnerTag> (index, entity);
+            }
+        }
+
+        [RequireComponentTag (typeof (VoxelChunkNewborn))]
+        struct SpawnVoxelJob : IJobForEachWithEntity<VoxelCount> {
+
+            public EntityCommandBuffer.Concurrent CommandBuffer;
+            public Random Random;
+            public BufferFromEntity<BlockVoxel> BlockVoxels;
+
+            public void Execute (Entity entity, int index, ref VoxelCount count) {
+
             }
         }
 
@@ -141,17 +156,16 @@ namespace Systems {
 
             entityCommandBufferSystem.AddJobHandleForProducer (chunkSpwanerHandle);
 
-            // var voxelSpwanerHandle = new SpawnVoxelJob {
-            //     CommandBuffer = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
-            //         PlayerPostions = playerPos,
-            //         Prefabs = prefabQuery.GetSingleton<Prefabs> (),
-            //         Random = random,
-            //         Vertices = GetBufferFromEntity<Vertex> (),
-            //         // Uvs = GetBufferFromEntity<Uv> (),
-            //         Triangles = GetBufferFromEntity<Triangle> (),
-            //         Normals = GetBufferFromEntity<Normal> (),
-            //         BlockVoxels = GetBufferFromEntity<BlockVoxel> ()
-            // }.Schedule (chunkQuery, chunkSpwanerHandle);
+            var voxelSpwanerHandle = new SpawnVoxelJob {
+                CommandBuffer = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
+                    // PlayerPostions = playerPos,
+                    Random = random,
+                    // Vertices = GetBufferFromEntity<Vertex> (),
+                    // Uvs = GetBufferFromEntity<Uv> (),
+                    // Triangles = GetBufferFromEntity<Triangle> (),
+                    // Normals = GetBufferFromEntity<Normal> (),
+                    BlockVoxels = GetBufferFromEntity<BlockVoxel> ()
+            }.Schedule (chunkQuery, chunkSpwanerHandle);
 
             // entityCommandBufferSystem.AddJobHandleForProducer (voxelSpwanerHandle);
             // voxelSpwanerHandle.Complete ();

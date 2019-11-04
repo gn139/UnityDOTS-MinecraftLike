@@ -89,11 +89,11 @@ public class ChunkUpdateSystem : JobComponentSystem {
                 for (int z = 0; z < count.Value; z++) {
                     // int hightlevel = (int) (heightMap.GetPixel (x + position.X * count.Value,
                     //     z + position.Z * count.Value).r * 100) - y;
-                    int worldX = x + position.X * count.Value;
-                    int worldZ = z + position.Z * count.Value;
-                    float height = noise.snoise (new float2 (worldX, worldZ) * 0.08F) * 2 + 5;
-                    height = height >= count.Value ? count.Value : height;
-                    for (int y = 0; y < height; y++) {
+                    // int worldX = x + position.X * count.Value;
+                    // int worldZ = z + position.Z * count.Value;
+                    // float height = noise.snoise (new float2 (worldX, worldZ) * 0.08F) * 2 + 5;
+                    // height = height >= count.Value ? count.Value : height;
+                    for (int y = 0; y < count.Value; y++) {
                         blocks.Add (new BlockVoxel (VoxelState.Already));
 
                         // var voxel = RandomCreateVoxel (index, Prefabs, y, height);
