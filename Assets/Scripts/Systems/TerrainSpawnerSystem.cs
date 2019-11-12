@@ -50,7 +50,7 @@ namespace Systems {
             // prefabQuery = GetEntityQuery (typeof (Prefabs));
             random = new Unity.Mathematics.Random ();
             random.InitState ();
-            perlinNoise = new PerlinNoise(random.NextInt(100, 1000), 250);
+            perlinNoise = new PerlinNoise (random.NextInt (100, 1000), 250);
 
             // heightMap = PerlinNoiseUtil.GenerateHeightMap (random.NextFloat (0, 99999), random.NextFloat (0, 99999));
 
@@ -125,11 +125,18 @@ namespace Systems {
         struct SpawnVoxelJob : IJobForEachWithEntity<VoxelCount> {
 
             public EntityCommandBuffer.Concurrent CommandBuffer;
-            public Random Random;
-            public BufferFromEntity<BlockVoxel> BlockVoxels;
+            public PerlinNoise PerlinNoise;
+            [NativeDisableParallelForRestriction] public BufferFromEntity<BlockVoxel> BlockVoxels;
+            [NativeDisableParallelForRestriction] DynamicBuffer<BlockVoxel> blocks;
 
             public void Execute (Entity entity, int index, ref VoxelCount count) {
+                blocks = BlockVoxels[entity];
+                for (int x = 0; x < count.Value; x++) {
+                    for (int z = 0; z < count.Value; z++) {
 
+
+                    }
+                }
             }
         }
 
@@ -159,7 +166,7 @@ namespace Systems {
             var voxelSpwanerHandle = new SpawnVoxelJob {
                 CommandBuffer = entityCommandBufferSystem.CreateCommandBuffer ().ToConcurrent (),
                     // PlayerPostions = playerPos,
-                    Random = random,
+                    PerlinNoise = perlinNoise,
                     // Vertices = GetBufferFromEntity<Vertex> (),
                     // Uvs = GetBufferFromEntity<Uv> (),
                     // Triangles = GetBufferFromEntity<Triangle> (),

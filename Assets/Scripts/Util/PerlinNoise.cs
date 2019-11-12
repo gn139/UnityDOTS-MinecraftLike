@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PerlinNoise {
@@ -16,11 +18,11 @@ public class PerlinNoise {
     this.scale = scale;
   }
 
-  public float[, ] GetNoiseMap (int lowerX, int upperX, int lowerZ, int upperZ) {
+  public NativeArray<float> GetNoiseMap (int lowerX, int upperX, int lowerZ, int upperZ) {
     int xRange = upperX - lowerX;
     int zRange = upperZ - lowerZ;
 
-    var noiseMap = new float[xRange, zRange];
+    var noiseMap = new NativeArray<float> (xRange * zRange, Allocator.TempJob);
 
     for (int i = 0; i < xRange; i++) {
       for (int j = 0; j < zRange; j++) {
@@ -29,21 +31,25 @@ public class PerlinNoise {
         var noise = 0f;
 
         for (int octave = 0; octave < octaves; octave++) {
-          var noiseValue = Mathf.PerlinNoise ((lowerX + i) / scale * frequency + seed, (lowerZ + j) / scale * frequency + seed);
+          // var noiseValue = Mathf.PerlinNoise ((lowerX + i) / scale * frequency + seed, (lowerZ + j) / scale * frequency + seed);
+          var noiseValue = Unity.Mathematics.noise.cnoise (new float2 ((lowerX + i) / scale * frequency + seed,
+            (lowerZ + j) / scale * frequency + seed));
           noise += noiseValue * amplitude;
 
           amplitude *= persistence;
           frequency *= lacunarity;
         }
 
-        noiseMap[i, j] = noise;
+        // noiseMap[i, j] = noise;
+        noiseMap[i + j * xRange] = noise;
       }
     }
 
     // normalize
     for (int i = 0; i < xRange; i++) {
       for (int j = 0; j < zRange; j++) {
-        noiseMap[i, j] = Mathf.InverseLerp (0.35f, 1.25f, noiseMap[i, j]);
+        // noiseMap[i, j] = Mathf.InverseLerp (0.35f, 1.25f, noiseMap[i, j]);
+        noiseMap[i + j * xRange] = math.unlerp (0.35f, 1.25f, noiseMap[i + j * xRange]);
       }
     }
 
